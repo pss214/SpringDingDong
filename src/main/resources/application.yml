@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: pss
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://spring-one-spoon.cgjthl8ixqn0.ap-northeast-2.rds.amazonaws.com:3306/pss
+    username: student
+    password: 12341234
+  jpa:
+    hibernate:
+      ddl-auto: update
+#  devtools:
+#    livereload:
+#      enabled: true
+#    remote:
+#      restart:
+#        enabled: false
+  thymeleaf:
+    prefix: classpath:/templates/
+logging:
+  level:
+    root: DEBUG
