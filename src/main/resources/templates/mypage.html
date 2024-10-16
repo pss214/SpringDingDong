@@ -73,9 +73,32 @@
             ).catch(err=>{
                 alert("조회 실패");
             })
+
         function edit(){
-            console.log(document.getElementById( 'password' ).value);
+            if (!confirm("수정 하시겠습니까?")) {
+                console.log("취소")
+            }else{
+                fetch(`/account/edit`,{
+                    method:"POST",
+                    headers:{"Content-Type":"application/json"},
+                    body:JSON.stringify({
+                    username:document.getElementById('id').value,
+                    password:document.getElementById('password').value,
+                    name:document.getElementById('name').value,
+                    phone:document.getElementById('phone').value
+                })
+                })
+                .then(res => res.json()
+                    .then(data=>{
+                        alert("수정 되었습니다");
+                        location.href = "/";
+                    })
+                ).catch(err=>{
+                    alert("수정 실패\n"+err);
+                })
+            }
         }
+        
         function deleteuser(){
             if (!confirm("삭제 하시겠습니까?")) {
                 console.log("취소")

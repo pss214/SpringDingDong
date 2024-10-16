@@ -1,6 +1,6 @@
-package springdingdong.pss.Account.dto.request;
+package springdingdong.pss.account.dto.request;
 
-public record JoinReqestDTO(
+public record EditAccountRequestDTO(
         String username,
         String password,
         String name,

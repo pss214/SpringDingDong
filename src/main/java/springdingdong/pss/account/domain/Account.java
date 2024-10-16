@@ -1,8 +1,8 @@
-package springdingdong.pss.Account.domain;
+package springdingdong.pss.account.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import springdingdong.pss.Account.dto.request.JoinReqestDTO;
+import springdingdong.pss.account.dto.request.JoinReqestDTO;
 import springdingdong.pss.common.domain.BaseTime;
 
 import java.util.UUID;

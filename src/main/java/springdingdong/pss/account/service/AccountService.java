@@ -1,15 +1,16 @@
-package springdingdong.pss.Account.service;
+package springdingdong.pss.account.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import springdingdong.pss.Account.domain.Account;
-import springdingdong.pss.Account.dto.request.EditAccountRequestDTO;
-import springdingdong.pss.Account.dto.request.FindUsernameRequestDTO;
-import springdingdong.pss.Account.dto.request.JoinReqestDTO;
-import springdingdong.pss.Account.dto.request.LoginRequestDTO;
-import springdingdong.pss.Account.dto.response.FindUsernameResponseDTO;
-import springdingdong.pss.Account.repository.AccountRepository;
+import springdingdong.pss.account.domain.Account;
+import springdingdong.pss.account.dto.request.EditAccountRequestDTO;
+import springdingdong.pss.account.dto.request.FindUsernameRequestDTO;
+import springdingdong.pss.account.dto.request.JoinReqestDTO;
+import springdingdong.pss.account.dto.request.LoginRequestDTO;
+import springdingdong.pss.account.dto.response.FindUsernameResponseDTO;
+import springdingdong.pss.account.repository.AccountRepository;
 import springdingdong.pss.common.dto.response.ResponseDTO;
 
 import java.util.Objects;
@@ -20,7 +21,11 @@ public class AccountService {
     final private AccountRepository accountRepository;
 
     public ResponseDTO joinAccount(JoinReqestDTO dto){
+        if (checkDuplicateNickname(dto.username())){
+            throw new RuntimeException("아이디가 중복입니다!");
+        }
         accountRepository.save(Account.from(dto));
+
         return new ResponseDTO("저장되었습니다",null);
     }
     public ResponseDTO loginAccount(LoginRequestDTO dto){

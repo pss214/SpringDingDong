@@ -1,4 +1,4 @@
-package springdingdong.pss.Account.dto.response;
+package springdingdong.pss.account.dto.response;
 
 public record LoginResponseDTO(
         String username,

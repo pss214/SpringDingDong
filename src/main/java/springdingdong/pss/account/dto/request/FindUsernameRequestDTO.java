@@ -1,4 +1,4 @@
-package springdingdong.pss.Account.dto.request;
+package springdingdong.pss.account.dto.request;
 
 public record FindUsernameRequestDTO(
         String username
