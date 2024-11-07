@@ -58,12 +58,9 @@
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script>
-        fetch("/account/find",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                username:localStorage.getItem("username")
-            })
+        fetch("/account/mypage",{
+            method:"GET",
+            headers:{"Content-Type":"application/json", Authorization : localStorage.getItem("token")}
         }).then(res => res.json()
             .then(data=>{
                 document.getElementById( 'id' ).setAttribute( 'value', data.data.username);
@@ -80,7 +77,7 @@
             }else{
                 fetch(`/account/edit`,{
                     method:"POST",
-                    headers:{"Content-Type":"application/json"},
+                    headers:{"Content-Type":"application/json", Authorization : localStorage.getItem("token")},
                     body:JSON.stringify({
                     username:document.getElementById('id').value,
                     password:document.getElementById('password').value,
@@ -103,9 +100,9 @@
             if (!confirm("삭제 하시겠습니까?")) {
                 console.log("취소")
             } else {
-                fetch(`/account?username=${localStorage.getItem("username")}`,{
+                fetch(`/account`,{
                     method:"DELETE",
-                    headers:{"Content-Type":"application/json"}
+                    headers:{"Content-Type":"application/json",Authorization : localStorage.getItem("token")}
                 }).then(res => res.json()
                     .then(data=>{
                         alert("삭제되었습니다");

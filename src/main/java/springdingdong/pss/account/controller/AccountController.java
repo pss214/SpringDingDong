@@ -2,6 +2,8 @@ package springdingdong.pss.account.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import springdingdong.pss.account.dto.request.EditAccountRequestDTO;
 import springdingdong.pss.account.dto.request.FindUsernameRequestDTO;
@@ -32,22 +34,21 @@ public class AccountController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e);
         }
-
     }
-    @PostMapping("/find")
-    public ResponseEntity<ResponseDTO> findUser(@RequestBody FindUsernameRequestDTO dto){
-        return ResponseEntity.ok().body(accountService.findUsername(dto));
+    @GetMapping("/mypage")
+    public ResponseEntity<ResponseDTO> findUser(@AuthenticationPrincipal User user){
+        return ResponseEntity.ok().body(accountService.mypageAccount(user));
     }
 //    @GetMapping("/find")
 //    public ResponseEntity<ResponseDTO> findUsername(@RequestParam(value = "username") String username){
 //        return ResponseEntity.ok().body(accountService.findUsername(new FindUsernameRequestDTO(username)));
 //    }
     @PostMapping("/edit")
-    public ResponseEntity<ResponseDTO> editUser(@RequestBody EditAccountRequestDTO dto){
-        return ResponseEntity.created(URI.create("/account/edit")).body(accountService.editAccount(dto));
+    public ResponseEntity<ResponseDTO> editUser(@AuthenticationPrincipal User user, @RequestBody EditAccountRequestDTO dto){
+        return ResponseEntity.created(URI.create("/account/edit")).body(accountService.editAccount(user, dto));
     }
     @DeleteMapping
-    public ResponseEntity<ResponseDTO> deleteUser(@RequestParam(value = "username")String username){
-        return ResponseEntity.created(URI.create("/account")).body(accountService.deleteAccount(username));
+    public ResponseEntity<ResponseDTO> deleteUser(@AuthenticationPrincipal User user){
+        return ResponseEntity.created(URI.create("/account")).body(accountService.deleteAccount(user));
     }
 }

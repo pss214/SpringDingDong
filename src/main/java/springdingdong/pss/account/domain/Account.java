@@ -2,9 +2,11 @@ package springdingdong.pss.account.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import springdingdong.pss.account.dto.request.JoinReqestDTO;
 import springdingdong.pss.common.domain.BaseTime;
 
+import java.net.PasswordAuthentication;
 import java.util.UUID;
 
 @Entity
@@ -21,10 +23,10 @@ public class Account extends BaseTime {
     private String name;
     private String phone;
 
-    public static Account from(JoinReqestDTO dto){
+    public static Account from(JoinReqestDTO dto, String password){
         return Account.builder()
                 .username(dto.username())
-                .password(dto.password())
+                .password(password)
                 .name(dto.name())
                 .phone(dto.phone())
                 .build();

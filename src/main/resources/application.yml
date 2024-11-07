@@ -8,7 +8,9 @@ spring:
     password: 12341234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+  profiles:
+    active: secret
 #  devtools:
 #    livereload:
 #      enabled: true
@@ -20,3 +22,7 @@ spring:
 logging:
   level:
     root: DEBUG
+
+#    koriait springdingdong pss214 base64 jwt test secretkey
+jwt:
+  secret : ${jwt}
