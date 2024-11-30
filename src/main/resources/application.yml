@@ -19,9 +19,6 @@ spring:
 #        enabled: false
   thymeleaf:
     prefix: classpath:/templates/
-logging:
-  level:
-    root: DEBUG
 
 #    koriait springdingdong pss214 base64 jwt test secretkey
 jwt:

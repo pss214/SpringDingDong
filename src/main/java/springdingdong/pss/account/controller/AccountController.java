@@ -1,6 +1,9 @@
 package springdingdong.pss.account.controller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -11,29 +14,23 @@ import springdingdong.pss.account.dto.request.JoinReqestDTO;
 import springdingdong.pss.account.dto.request.LoginRequestDTO;
 import springdingdong.pss.account.service.AccountService;
 import springdingdong.pss.common.dto.response.ResponseDTO;
+import springdingdong.pss.common.exception.NotFoundException;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("/account")
 @RequiredArgsConstructor
+@Slf4j
 public class AccountController {
     final private AccountService accountService;
     @PostMapping("/join")
     public ResponseEntity<ResponseDTO> join(@RequestBody JoinReqestDTO dto){
-        try {
-            return ResponseEntity.created(URI.create("/account/join")).body(accountService.joinAccount(dto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(new ResponseDTO(e.getMessage(),null));
-        }
+        return ResponseEntity.created(URI.create("/account/join")).body(accountService.joinAccount(dto));
     }
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO dto){
-        try {
-            return ResponseEntity.ok().body(accountService.loginAccount(dto));
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e);
-        }
+        return ResponseEntity.ok().body(accountService.loginAccount(dto));
     }
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDTO> findUser(@AuthenticationPrincipal User user){
@@ -50,5 +47,11 @@ public class AccountController {
     @DeleteMapping
     public ResponseEntity<ResponseDTO> deleteUser(@AuthenticationPrincipal User user){
         return ResponseEntity.created(URI.create("/account")).body(accountService.deleteAccount(user));
+    }
+
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity<ResponseDTO> errorHandler(NotFoundException e){
+        log.debug("AccountController 에러 메세지 : {}", e.getMessage());
+        return ResponseEntity.badRequest().body(new ResponseDTO(e.getMessage(), null));
     }
 }

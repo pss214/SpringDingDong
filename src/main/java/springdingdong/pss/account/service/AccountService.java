@@ -2,20 +2,17 @@ package springdingdong.pss.account.service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import springdingdong.pss.account.domain.Account;
 import springdingdong.pss.account.dto.request.*;
-import springdingdong.pss.account.dto.response.FindUsernameResponseDTO;
 import springdingdong.pss.account.dto.response.LoginResponseDTO;
 import springdingdong.pss.account.dto.response.MyPageResponseDTO;
 import springdingdong.pss.account.repository.AccountRepository;
 import springdingdong.pss.common.dto.response.ResponseDTO;
+import springdingdong.pss.common.exception.NotFoundException;
 import springdingdong.pss.common.service.TokenProvider;
-
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +35,7 @@ public class AccountService {
             String token = tokenProvider.createAccessToken(String.format("%s:%s", account.getUsername(), "ROLE_USER"));
             return new ResponseDTO("로그인 성공",new LoginResponseDTO(account.getUsername(), token));
         }else {
-            throw new RuntimeException("로그인 실패");
+            throw new NotFoundException("회원정보 없음");
         }
     }
     public ResponseDTO mypageAccount(User dto){
@@ -53,12 +50,13 @@ public class AccountService {
     }
     public ResponseDTO deleteAccount(User user){
         accountRepository.delete(findByAccount(user.getUsername()));
+
         return new ResponseDTO("삭제되었습니다",null);
     }
     public boolean checkDuplicateNickname(String username){
         return accountRepository.existsByUsername(username);
     }
     private Account findByAccount(String username){
-        return accountRepository.findByUsername(username).orElseThrow(()-> new RuntimeException("회원 정보 없음"));
+        return accountRepository.findByUsername(username).orElseThrow(()->new NotFoundException("회원정보 없음"));
     }
 }
